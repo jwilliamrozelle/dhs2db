@@ -1,0 +1,16 @@
+Package: dhs2db
+Type: Package
+Title: Process dhs data and upload data to a postgresql server
+Version: 0.1.0
+Author: Jeffrey W. Rozelle
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GNU 3.0
+Encoding: UTF-8
+LazyData: true
+Imports: rdhs, dplyr, DBI, RPostgreSQL
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

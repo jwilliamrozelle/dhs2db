@@ -1,0 +1,108 @@
+---
+title: "dhs2db_tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dhs2db_tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Using dhs2db
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Permission and requirements
+
+This package and tutorial assume that you have an account at dhsprogram.com and permission to access datasets.
+
+## Set the environment
+
+First, load the required packages into your R session.
+
+```{r setup}
+library(dhs2db)
+library(rdhs)
+library(sf)
+```
+
+
+You may wish to keep your personal information outside of your codebase, and `.Renviron` is a good way to accomplish this. Each line in the `.Renviron` file will allow you to set an environment variable (for example, mine has a single line `DHS_EMAIL = <your_email@example.com>`). I use an environment email to store, for example, usernames and passwords and include the `.Renviron` in my `.gitignore` file, so that sensitive information remains on my local computer and is never uploaded to the cloud.
+
+You must restart your R session to load environment variables from the `.Renviron` folder. To follow this tutorial without restarting R, you can set environment variables within the R session by running the following code
+
+
+```{r eval = FALSE}
+
+Sys.setenv(DHS_EMAIL = "your_email@example.com")
+Sys.setenv(DHS_PROJECT = "YOUR DHS PROJECT NAME")
+
+
+```
+
+
+## Load the data into R
+
+We will load information into R using the `rdhs` package. For detailed information on retrieving data using `rdhs`, visit the [vignette](https://cran.r-project.org/web/packages/rdhs/vignettes/introduction.html) This package assumes you download data in STATA as zip files. When prompted, type `1` That you would write files outside your R temporary directory, then enter the password for your dhsprogram.com account.
+
+```{r warning=FALSE}
+
+# Set up credentials
+set_rdhs_config(email = Sys.getenv("DHS_EMAIL"),
+                project = Sys.getenv("DHS_PROJECT"),
+                config_path = "rdhs.json",
+                cache_path = "C:\\Users\\JWROZE~1\\AppData\\Local\\jwrozelle\\rdhs\\Cache2",
+                # cache_path = "dhs_mlm_project",
+                global = F)
+
+
+# Get DHS surveys
+survs <- dhs_surveys(
+  countryIds = "UG",
+  surveyType = "DHS",
+  surveyStatus = "Completed",
+  surveyYear = c(2016)
+)
+
+# download the datasets
+datasets <- dhs_datasets(
+  surveyIds = survs$SurveyId, 
+  fileFormat = "stata",
+  force = TRUE
+  )
+downloads <- get_datasets(
+  datasets$FileName, 
+  clear_cache = TRUE)
+
+
+# make an empty list of dhs data
+dhsData.list <- list()
+
+# load each file into R
+for (svyTable in names(downloads)) {
+  
+  # load the downloaded data (sometimes there are weird permissions issues with rDHS. For the sake of this tutorial we will ignorre them if they fail)
+  try(mySvy <- readRDS(downloads[[svyTable]]))
+  
+  if (exists("mySvy")) {
+    # assign the name of the download
+    dhsData.list[[svyTable]] <- mySvy
+  }
+  
+  # remove the generic survey variable from the environment
+  rm(mySvy)
+}
+
+dhsData.list[["UGGE7AFL"]] <- st_read("C:/Users/jwrozelle/Downloads/UGGE7AFL/UGGE7AFL.shp")
+
+
+
+```
+##
+
+
+
