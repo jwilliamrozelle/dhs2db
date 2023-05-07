@@ -171,8 +171,7 @@ directory, then enter the password for your dhsprogram.com account.
     set_rdhs_config(email = Sys.getenv("DHS_EMAIL"),
                     project = Sys.getenv("DHS_PROJECT"),
                     config_path = "rdhs.json",
-                    cache_path = "C:\\Users\\JWROZE~1\\AppData\\Local\\jwrozelle\\rdhs\\Cache2",
-                    # cache_path = "dhs_mlm_project",
+                    cache_path = "<your_cache_path>",
                     global = F)
 
 
@@ -213,7 +212,7 @@ directory, then enter the password for your dhsprogram.com account.
       rm(mySvy)
     }
 
-    dhsData.list[["UGGE7AFL"]] <- st_read("C:/Users/jwrozelle/Downloads/UGGE7AFL/UGGE7AFL.shp")
+    dhsData.list[["UGGE7AFL"]] <- st_read("<additional_GE_table>")
 
 ## Send your dhs data to a PostgreSQL database!
 
