@@ -159,7 +159,9 @@ dhs2pg(
   )
 
 ```
-```
+
+
+```default
 Creating schema...
 Identifying relationships...
 Trimming duplicate variables in tables...
