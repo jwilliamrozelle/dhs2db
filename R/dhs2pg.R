@@ -15,15 +15,17 @@
 #'
 #'
 
-dhs_data_list <- dhsData.list
-schema_name <- Sys.getenv("DB_SCHEMA")
-db_host <- Sys.getenv("DB_HOST")
-db_port <- Sys.getenv("DB_PORT")
-db_name <- Sys.getenv("DB_NAME")
-db_user <- Sys.getenv("DB_USER")
-db_password <- Sys.getenv("DB_PW")
-
 dhs2pg <- function(dhs_data_list, schema_name, db_host, db_port, db_name, db_user, db_password) {
+
+  # dhs_data_list <- dhsData.list
+  # schema_name <- Sys.getenv("DB_SCHEMA")
+  # db_host <- Sys.getenv("DB_HOST")
+  # db_port <- Sys.getenv("DB_PORT")
+  # db_name <- Sys.getenv("DB_NAME")
+  # db_user <- Sys.getenv("DB_USER")
+  # db_password <- Sys.getenv("DB_PW")
+
+
   # Load required packages
   require(DBI)
   require(RPostgreSQL)
@@ -43,6 +45,14 @@ dhs2pg <- function(dhs_data_list, schema_name, db_host, db_port, db_name, db_use
 
   on.exit(dbDisconnect(conn), add = TRUE)
 
+
+  # rename to two digit survey type
+  if (nchar(names(dhs_data_list))[1] != 2) {
+    names(dhs_data_list) <- substr(names(dhs_data_list), 3,4) |> tolower()
+  }
+
+  schema_name <- tolower(schema_name)
+
   # Create a new schema in the PostgreSQL database
   cat("Creating schema...\n")
   create_schema(conn, schema_name)
@@ -50,6 +60,12 @@ dhs2pg <- function(dhs_data_list, schema_name, db_host, db_port, db_name, db_use
   # Identify relationships between the dataframes in dhs_data_list
   cat("Identifying relationships...\n")
   relationships <- identify_relationships(dhs_data_list)
+
+
+  # Trim duplicate variables
+  cat("Trimming duplicate variables in tables...\n")
+  dhs_data_list <- removeDup(dhs_data_list)
+
 
   # Upload the dataframes to the PostgreSQL database
   cat("Uploading dataframes...\n")
@@ -74,7 +90,7 @@ dhs2pg <- function(dhs_data_list, schema_name, db_host, db_port, db_name, db_use
       } else {
         suffix <- ""
       }
-      upload_table_name <- paste0(table_name, suffix)
+      upload_table_name <- paste0(table_name, suffix) |> tolower()
       upload_dataframe_to_postgres(conn, schema_name, upload_table_name, split_dfs[[i]])
       uploaded_tables <- c(uploaded_tables, upload_table_name)
     }
@@ -82,11 +98,11 @@ dhs2pg <- function(dhs_data_list, schema_name, db_host, db_port, db_name, db_use
 
   # Create foreign keys for the tables in the PostgreSQL database
   cat("Creating foreign keys...\n")
-  create_foreign_keys(conn, schema_name, relationships)
+  create_foreign_keys(conn, schema_name, relationships, uploaded_tables)
 
-  # Commit the transaction
-  cat("Committing transaction...\n")
-  dbCommit(conn)
+  # # Commit the transaction
+  # cat("Committing transaction...\n")
+  # dbCommit(conn)
 
   return(paste("Data upload successful. Uploaded tables:", paste(uploaded_tables, collapse = ", ")))
 }

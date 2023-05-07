@@ -18,12 +18,14 @@ upload_dataframe_to_postgres <- function(conn, schema_name, table_name, df) {
   # Clean column names
   colnames(df) <- clean_column_names(colnames(df))
 
-  # Remove the schema name prefix from the table name
-  table_name <- gsub(paste0("^", schema_name, "\\."), "", table_name)
+  # # # Remove the schema name prefix from the table name
+  # # schema_table_name <- gsub(paste0("^", schema_name, "\\."), "", table_name) |> tolower()
+  #
+  # schema_table_name <- paste0(schema_name, ".", table_name) |> tolower()
 
-  # Set the search_path to the desired schema before uploading the dataframe
-  dbSendQuery(conn, paste0("SET search_path TO ", schema_name, ", public;"))
+  # # Set the search_path to the desired schema before uploading the dataframe
+  # dbSendQuery(conn, paste0("SET search_path TO ", schema_name, ", public;"))
 
   # Upload the dataframe to the PostgreSQL database
-  dbWriteTable(conn, name = table_name, df, row.names = FALSE)
+  dbWriteTable(conn, name = c(schema_name, tolower(table_name)), df, row.names = FALSE)
 }

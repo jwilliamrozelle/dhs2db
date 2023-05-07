@@ -1,5 +1,5 @@
 ---
-title: "dhs2db_tutorial"
+title: "dhs2db Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{dhs2db_tutorial}
@@ -25,7 +25,7 @@ This package and tutorial assume that you have an account at dhsprogram.com and 
 First, load the required packages into your R session.
 
 ```{r setup}
-library(dhs2db)
+# library(dhs2db)
 library(rdhs)
 library(sf)
 ```
@@ -49,7 +49,7 @@ Sys.setenv(DHS_PROJECT = "YOUR DHS PROJECT NAME")
 
 We will load information into R using the `rdhs` package. For detailed information on retrieving data using `rdhs`, visit the [vignette](https://cran.r-project.org/web/packages/rdhs/vignettes/introduction.html) This package assumes you download data in STATA as zip files. When prompted, type `1` That you would write files outside your R temporary directory, then enter the password for your dhsprogram.com account.
 
-```{r warning=FALSE}
+```{r warning=FALSE, eval = F}
 
 # Set up credentials
 set_rdhs_config(email = Sys.getenv("DHS_EMAIL"),
@@ -85,7 +85,7 @@ dhsData.list <- list()
 # load each file into R
 for (svyTable in names(downloads)) {
   
-  # load the downloaded data (sometimes there are weird permissions issues with rDHS. For the sake of this tutorial we will ignorre them if they fail)
+  # load the downloaded data (sometimes there are weird permissions issues with rDHS. For the sake of this tutorial we will ignore them if they fail)
   try(mySvy <- readRDS(downloads[[svyTable]]))
   
   if (exists("mySvy")) {
@@ -99,10 +99,61 @@ for (svyTable in names(downloads)) {
 
 dhsData.list[["UGGE7AFL"]] <- st_read("C:/Users/jwrozelle/Downloads/UGGE7AFL/UGGE7AFL.shp")
 
+```
+## Send your dhs data to a PostgreSQL database!
 
+The next step is relatively simple using the `dhs2pg` function, although many helper functions in the background make this work. 
+
+* First, the `dhs2pg` creates a schema,
+* Drops variables that are duplicated in other datasets (for example, information about place of birth is both in the Individual Recode table and the Birth Recode tables). Then,
+* For any tables that are still more than 1600 columns wide, a helper function splits the tables, but retains id columns within each.
+* Next, the `dhs2pg` function will upload tables to the PostgreSQL database. Each table is named by the data type (i.e. "ir", "br", etc.).
+* Finally, the unique ids and relationships are added as constraints to the tables.
+
+```{r eval = F}
+
+  # dhs_data_list <- dhsData.list
+  # schema_name <- Sys.getenv("DB_SCHEMA")
+  # db_host <- Sys.getenv("DB_HOST")
+  # db_port <- Sys.getenv("DB_PORT")
+  # db_name <- Sys.getenv("DB_NAME")
+  # db_user <- Sys.getenv("DB_USER")
+  # db_password <- Sys.getenv("DB_PW")
+
+dhs2pg(
+  dhs_data_list = dhsData.list,
+  schema_name = Sys.getenv("DB_SCHEMA"),
+  db_host = Sys.getenv("DB_HOST"),
+  db_port = Sys.getenv("DB_PORT"),
+  db_name = Sys.getenv("DB_NAME"),
+  db_user = Sys.getenv("DB_USER"),
+  db_password = Sys.getenv("DB_PW")
+  )
 
 ```
-##
+```
+Creating schema...
+Identifying relationships...
+Trimming duplicate variables in tables...
+Uploading dataframes...
+Uploading br...
+Uploading cr...
+Uploading hr...
+Uploading ir...
+Uploading kr...
+Uploading mr...
+Uploading pr...
+Uploading ge...
+Creating foreign keys...
+[1] "Data upload successful. Uploaded tables: br, cr, hr, ir, kr, mr, pr, ge"
+```
+
+
+## ERD
+
+The resulting database organization is:
+
+![ERD](erd.png){width=100%}
 
 
 

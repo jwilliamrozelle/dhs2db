@@ -6,11 +6,11 @@
 split_dataframe <- function(df, id_vars) {
   max_cols <- 1600 - length(id_vars)
 
-  # Check if the row size is too big
-  row_size <- sum(sapply(df, object.size))
-  if (row_size > 8160) {
-    max_cols <- floor(max_cols / 2)
-  }
+  # # Check if the row size is too big
+  # row_size <- sum(sapply(df, object.size))
+  # if (row_size > 8160) {
+  #   max_cols <- floor(max_cols / 2)
+  # }
 
   if (ncol(df) <= max_cols) {
     return(list(df))
