@@ -1,13 +1,11 @@
 ---
-title: "dhs2db Tutorial"
+title: "dhs2db: An R Package for Importing and Linking DHS Data in PostgreSQL"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{dhs2db_tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-# dhs2db: An R Package for Importing and Linking DHS Data in PostgreSQL
 
 ## Introduction
 
