@@ -164,14 +164,6 @@ many helper functions in the background make this work.
 <!-- -->
 
 
-      # dhs_data_list <- dhsData.list
-      # schema_name <- Sys.getenv("DB_SCHEMA")
-      # db_host <- Sys.getenv("DB_HOST")
-      # db_port <- Sys.getenv("DB_PORT")
-      # db_name <- Sys.getenv("DB_NAME")
-      # db_user <- Sys.getenv("DB_USER")
-      # db_password <- Sys.getenv("DB_PW")
-
     dhs2pg(
       dhs_data_list = dhsData.list,
       schema_name = Sys.getenv("DB_SCHEMA"),
