@@ -28,7 +28,6 @@ There are several reasons why the development of the dhs2db package may be helpf
 5. **Ease of use**: The dhs2db package simplifies the process of importing and linking DHS data, making it accessible to researchers with varying levels of experience in data management and analysis.
 git remote add origin https://github.com/jwilliamrozelle/dhs2db.git
 
-git push -u -f origin main
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

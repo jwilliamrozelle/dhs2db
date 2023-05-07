@@ -49,8 +49,6 @@ be helpful for researchers working with DHS data:
     git remote add origin
     <https://github.com/jwilliamrozelle/dhs2db.git>
 
-git push -u -f origin main
-
 ## Permission and requirements
 
 This package and tutorial assume that you have an account at
