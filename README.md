@@ -1,3 +1,5 @@
+# dhs2db: An R Package for Importing and Linking DHS Data in PostgreSQL
+
 ## Introduction
 
 The Demographic and Health Surveys (DHS) program is a valuable source of

@@ -7,6 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# dhs2db: An R Package for Importing and Linking DHS Data in PostgreSQL
+
 ## Introduction
 
 The Demographic and Health Surveys (DHS) program is a valuable source of information for researchers and policymakers working in the fields of public health, demography, and social sciences. It provides nationally representative and cross-sectional data for a wide range of indicators related to population, health, and nutrition. The DHS data are collected through household interviews conducted in numerous countries, usually every five years.
