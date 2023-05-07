@@ -26,7 +26,9 @@ There are several reasons why the development of the dhs2db package may be helpf
 4. **Reproducibility**: Using the dhs2db package ensures that the process of importing and linking DHS data is standardized and reproducible. This is particularly important for researchers who want to share their work and collaborate with others.
 
 5. **Ease of use**: The dhs2db package simplifies the process of importing and linking DHS data, making it accessible to researchers with varying levels of experience in data management and analysis.
+git remote add origin https://github.com/jwilliamrozelle/dhs2db.git
 
+git push -u -f origin main
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -179,7 +181,7 @@ Creating foreign keys...
 
 The resulting database organization is:
 
-![ERD](erd.png){width=100%}
+![ERD](vignettes/erd.png){width=100%}
 
 
 
