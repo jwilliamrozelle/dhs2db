@@ -161,6 +161,8 @@ dhs2pg(
 ```
 
 
+Output will be:
+
 ```default
 Creating schema...
 Identifying relationships...
