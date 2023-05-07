@@ -28,6 +28,43 @@ There are several reasons why the development of the dhs2db package may be helpf
 5. **Ease of use**: The dhs2db package simplifies the process of importing and linking DHS data, making it accessible to researchers with varying levels of experience in data management and analysis.
 git remote add origin https://github.com/jwilliamrozelle/dhs2db.git
 
+## The PostgreSQL database
+
+## Setting up a PostgreSQL database and security considerations
+
+### Installing and setting up PostgreSQL
+
+Before you can use the dhs2db package, you need to have a PostgreSQL database up and running.You can download and install PostgreSQL from the official website: [https://www.postgresql.org/download/](https://www.postgresql.org/download/). After installation, create a new PostgreSQL database using the `createdb` command-line utility or a graphical tool like [pgAdmin](https://www.pgadmin.org/). Ensure that your PostgreSQL server is running and accessible from your R environment. You may need to configure the server's `postgresql.conf` and `pg_hba.conf` files to allow connections from your local machine or remote clients.
+
+### Security considerations
+
+When working with sensitive data, it is crucial to take necessary precautions to secure your PostgreSQL database. Here are some general security practices to follow:
+
+1. **Strong passwords**: Use strong, unique passwords for all database users, including the superuser (postgres) and any application-specific users.
+
+2. **Least privilege principle**: Assign the minimum required privileges to each database user. For example, a user who only needs read access to certain tables should not have write permissions.
+
+3. **Network security**: Restrict access to your PostgreSQL server to trusted IP addresses or networks. Update your `pg_hba.conf` file to only allow connections from specific IP addresses or networks.
+
+4. **Data encryption**: Enable data encryption for data at rest using file system level encryption or PostgreSQL's built-in encryption features. For data in transit, use SSL/TLS to encrypt communication between the PostgreSQL server and clients.
+
+5. **Regular backups**: Schedule regular backups of your PostgreSQL database to protect against data loss due to hardware failure or other issues. Store backups in a secure, offsite location.
+
+6. **Monitoring and auditing**: Monitor your PostgreSQL server for signs of unauthorized access, and set up logging to track user activity within the database.
+
+### Configuring the dhs2db package
+
+After setting up your PostgreSQL database, you can connect to it with the appropriate details. Although the `dhs2pg` function will accept plain text, you may wish to avoid including sensitive information directly in your code - particularly if you use a public repository like github for version control. This tutorial assumes you set the following environment variables:
+
+- `DB_SCHEMA`: The schema name in the PostgreSQL database.
+- `DB_HOST`: The hostname or IP address of the PostgreSQL server.
+- `DB_PORT`: The port number on which the PostgreSQL server is listening.
+- `DB_NAME`: The name of the PostgreSQL database.
+- `DB_USER`: The username to use when connecting to the PostgreSQL server.
+- `DB_PW`: The password for the user specified in `DB_USER`.
+
+You can set these environment variables in your R environment using the `Sys.setenv()` function, or you can store them in a `.Renviron` file in your project directory. Make sure to protect the `.Renviron` file by setting appropriate file permissions and not including it in your version control system.
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -127,6 +164,8 @@ for (svyTable in names(downloads)) {
 dhsData.list[["UGGE7AFL"]] <- st_read("C:/Users/jwrozelle/Downloads/UGGE7AFL/UGGE7AFL.shp")
 
 ```
+
+
 ## Send your dhs data to a PostgreSQL database!
 
 The next step is relatively simple using the `dhs2pg` function, although many helper functions in the background make this work. 
