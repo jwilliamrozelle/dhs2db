@@ -120,7 +120,7 @@ We will load information into R using the `rdhs` package. For detailed informati
 set_rdhs_config(email = Sys.getenv("DHS_EMAIL"),
                 project = Sys.getenv("DHS_PROJECT"),
                 config_path = "rdhs.json",
-                cache_path = "<your_cache_path>",
+                cache_path = file.path("X://Data", "Misc", "rdhs.json"),
                 global = F)
 
 
@@ -215,7 +215,7 @@ Creating foreign keys...
 
 The resulting database organization is:
 
-![ERD](vignettes/erd.png){width=100%}
+![ERD](vignettes/dhs_erd.png){width=100%}
 
 
 

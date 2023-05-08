@@ -169,7 +169,7 @@ directory, then enter the password for your dhsprogram.com account.
     set_rdhs_config(email = Sys.getenv("DHS_EMAIL"),
                     project = Sys.getenv("DHS_PROJECT"),
                     config_path = "rdhs.json",
-                    cache_path = "<your_cache_path>",
+                    cache_path = file.path("X://Data", "Misc", "rdhs.json"),
                     global = F)
 
 
@@ -264,6 +264,6 @@ Output will be:
 The resulting database organization is:
 
 <figure>
-<img src="vignettes/erd.png" style="width:100.0%" alt="ERD" />
+<img src="vignettes/dhs_erd.png" style="width:100.0%" alt="ERD" />
 <figcaption aria-hidden="true">ERD</figcaption>
 </figure>
