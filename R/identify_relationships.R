@@ -86,6 +86,16 @@ identify_relationships <- function(dhs_data_list) {
     )))
   }
 
+  # GC to IR relationship
+  if ("gc" %in% names(table_names) && "ir" %in% names(table_names)) {
+    relationships <- append(relationships, list(list(
+      child_table = "ir",
+      parent_table = "gc",
+      child_columns = c("v001"),
+      parent_columns = c("dhclust")
+    )))
+  }
+
   # Add more relationships based on the provided guidance
 
   return(relationships)

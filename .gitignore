@@ -3,6 +3,6 @@
 .RData
 .Ruserdata
 inst/doc
-
 .Renviron
 *.pdf
+rdhs.json

@@ -48,8 +48,6 @@ be helpful for researchers working with DHS data:
 5.  **Ease of use**: The dhs2db package simplifies the process of
     importing and linking DHS data, making it accessible to researchers
     with varying levels of experience in data management and analysis.
-    git remote add origin
-    <https://github.com/jwilliamrozelle/dhs2db.git>
 
 ## The PostgreSQL database
 
